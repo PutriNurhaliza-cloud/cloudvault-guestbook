@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    container_name: cloudvault-web-putri
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=rahsia_aman
+      - DB_NAME=cloudvault_db
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - cloudnet
+
+  db:
+    image: mysql:8
+    container_name: cloudvault-db-putri
+    environment:
+      MYSQL_ROOT_PASSWORD: rahsia_aman
+      MYSQL_DATABASE: cloudvault_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+    networks:
+      - cloudnet
+
+volumes:
+  dbdata:
+
+networks:
+  cloudnet:
+    driver: bridge
